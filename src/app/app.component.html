@@ -1,0 +1,145 @@
+<form (ngSubmit)="submit()" [formGroup]="form">
+  <h3>Resume Fill Up Form </h3>
+
+  <div>
+    <label>Firstname:</label>
+    <input formControlName="firstname" placeholder="firstname"
+           type="text">
+    <small *ngIf="form.get('firstname')?.getError('required') && form.get('firstname')?.touched">
+      Firstname is required
+    </small>
+  </div>
+
+  <div><label>Lastname:</label>
+    <input formControlName="lastname" placeholder="lastname"
+           type="text">
+    <small *ngIf="form.get('lastname')?.getError('required') && form.get('lastname')?.touched">
+      Lastname is required
+    </small>
+  </div>
+
+
+  <div formGroupName="userContactInfo">
+    <div><label>E-mail:</label>
+      <input formControlName="email" placeholder="email"
+             type="text">
+      <small
+        *ngIf="form.get('userContactInfo.email')?.getError('required') && form.get('userContactInfo.email')?.touched">
+        E-mail is required
+      </small>
+
+      <small *ngIf="form.get('userContactInfo.email')?.getError('email') && form.get('userContactInfo.email')?.touched">
+        E-mail format incorrect
+      </small>
+    </div>
+
+    <div><label>Phone:</label>
+      <input formControlName="phone" placeholder="phone"
+             type="text">
+      <small
+        *ngIf="form.get('userContactInfo.phone')?.getError('required') && form.get('userContactInfo.phone')?.touched">
+        Phone is required
+      </small>
+    </div>
+  </div>
+
+  <div formGroupName="resources">
+    <div>
+      <label>Github Link</label>
+      <input formControlName="gitUrl" placeholder="Github" type="text">
+      <small *ngIf="form.get('resources.gitUrl')?.getError('pattern')">
+        Incorrect Link
+      </small>
+    </div>
+
+    <div>
+      <label>LinkedIn Link</label>
+      <input formControlName="linkedinUrl" placeholder="LinkedIn" type="text">
+      <small *ngIf="form.get('resources.linkedinUrl')?.getError('pattern')">
+        Incorrect Link
+      </small>
+    </div>
+  </div>
+  <div>
+    <button (click)="addExperience()" type="button">Add Experience</button>
+  </div>
+  <div formArrayName="experience">
+    <ng-container *ngFor="let experience of experienceFormArray.controls; let i = index">
+      <div [formGroupName]="i">
+        <div>
+          <input formControlName="company" placeholder="company" type="text">
+          <small *ngIf="experience.get('company')?.getError('required') && experience.get('company')?.touched">
+            Company is required
+          </small>
+        </div>
+
+        <div>
+          <input formControlName="startYear" placeholder="Start Year" type="text">
+          <small *ngIf="experience.get('startYear')?.getError('required') && experience.get('startYear')?.touched">
+            Start Year is required
+          </small>
+          <small *ngIf="experience.get('startYear')?.getError('max')">
+            Your year exceeds current year
+          </small>
+        </div>
+
+        <div>
+          <input formControlName="endYear" placeholder="End Year" type="text">
+          <small *ngIf="experience.get('endYear')?.getError('max')" >
+            Your year exceeds current year
+          </small>
+        </div>
+
+        <button (click)="removeExperience(i)" type="button">Remove Experience</button>
+      </div>
+      <hr>
+    </ng-container>
+  </div>
+
+  <div>
+    <button (click)="addEducation()" class="arr" type="button">Add Education</button>
+  </div>
+  <div formArrayName="education">
+    <ng-container *ngFor="let education of educationFormArray.controls; let i = index">
+      <div [formGroupName]="i">
+        <div>
+          <input formControlName="school" placeholder="school" type="text">
+          <small *ngIf="education.get('school')?.getError('required') && education.get('school')?.touched">
+            Company is required
+          </small>
+        </div>
+
+        <div>
+          <input formControlName="startYear" placeholder="Start Year" type="text">
+          <small *ngIf="education.get('startYear')?.getError('required') && education.get('startYear')?.touched">
+            Start Year is required
+          </small>
+          <small *ngIf="education.get('startYear')?.getError('max')" >
+            Your year exceeds current year
+          </small>
+        </div>
+
+        <div>
+          <input formControlName="endYear" placeholder="End Year" type="text">
+          <small *ngIf="education.get('endYear')?.getError('max')" >
+            Your year exceeds current year
+          </small>
+        </div>
+        <button (click)="removeEducation(i)" type="button">Remove Education</button>
+      </div>
+      <hr>
+    </ng-container>
+  </div>
+
+  <div>
+    <button [disabled]="form.invalid" type="submit">Submit</button>
+  </div>
+</form>
+<br>
+
+Valid: {{form.valid}}
+
+<pre>
+{{form.value | json}}
+</pre>
+
